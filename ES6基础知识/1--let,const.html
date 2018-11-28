@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>ECMAScript6(the different and new)</title>
+	<style type="text/css" media="screen">
+		*{ margin: 0; padding: 0; box-sizing: border-box; }
+		body{ padding: 20px; }
+		#base { background: #ccc; padding: 20px; }
+		#base p span { color: red; }
+		#base p em { font-size: 18px; color: chocolate; }
+	</style>
+</head>
+<body>
+	<div id="base">
+		<p>1.<span>let命令</span>声明变量，类似于var。但声明的变量，只在代码块中有效。适合for循环使用。不存在变量提升，即在声明前使用会报错，而不是undefined.‘暂时性死区’,即let和const在区块中声明变量，那么会形成封闭作用域，在声明前都不可使用，即使存在变量在全局已经声明过。typeof也不再100%安全，之前对不存在的命令会返回undefined,现在如果在let之前，将报错。为了减少运行错误，养成良好习惯，所有代码在声明后使用，即使在声明语句使用也将报错。<em>例一</em><span>不允许在相同作用域重复声明同一变量</span></p>
+		<p>2.<span>块级作用域</span>ES5使用的全局作用域和函数作用域.没有块级作用域的问题：内层变量覆盖外层变量。for中的计数变量会泄露为全局变量。<span>let即为新增了块级作用域</span>ES6允许块级作用域任意嵌套。后果：广泛应用的立即执行函数表达式(IIFE)不再必要。
+		函数可以在块级作用域中声明，但在块级作用域外不可使用，类似于let。ES5函数只可以在全局和函数作用域中声明。ES6浏览器：允许块级作用域声明函数，函数申明类似于var，即会提升到全局或函数作用域的头部，或所在块的头部。<em>例二</em>
+		<span>没有块作用域，声明函数会报错</span>实际上，块级作用域相当于一个语句，把多个操作封装在一起，没有返回值。<span>do就是使块可以返回一个值，即最后一句运算的值。</span></p>
+		<p>3.<span>const命令声明一个只读常量</span>改变会报错，所以声明时应该赋值，否则就会报错<em>例3</em>。const的作用域与let相同，也存在暂时性死区，只能在声明后使用，不可重复声明。<span>const本质上保证的是变量指向的地址不能改变，而不是变量的值。</span>对于简单数据类型，值就保存在那个地址中。对于复合数据类型，变量指向内存地址，保存的是一个指针，数据结构可变，但不能将变量指向另一个地址。如果真的想将对象冻结，可以使用Object.freeze方法(我想到的：Object还有一些方法，是可以改变属性的读写等行为。)</p>
+		<p>4.<span>ES6声明变量的六种方法</span>var, function, let, const, import, class</p>
+		<p>5.<span>顶层对象的属性</span>Browser中为window,Node中为global. ES5之前，顶层对象的属性与全局变量是等价的，这被认为是js的最大败笔之一。问题：没法在编译时报出未声明错误只有运行时才能知道（因为全局变量可能是顶层对象的属性创造的，而属性的创造是动态的）。程序员很容易不知不觉创建了全局变量。顶层对象的属性是到处可写的，不利于模块化编程。ES6的改变：var,function声明的全局变量，依然是顶层对象的属性。另一方面：let,const,class声明的全局变量不属于顶层对象的属性。</p>
+		<p>6.<span>global对象</span>ES5的顶层对象问题：浏览器是window，但Node和web worker没有window。浏览器和web worker，self指向顶层对象，但node没有self。node里顶层对象是global，其他环境都不支持。为了在不同环境都能取到顶层变量，现在使用this。但是问题：全局环境，this返回顶层对象。但是Node和ES6模块中，返回当前模块。函数this，如果不是作为对象方法运行，指向顶层对象，但是严格模式，返回undefined;现在的提案：在语言标准层面，引入一个global作为顶层对象.</p>
+	</div>
+
+	<script type="text/javascript">
+		//例1 for循环设置变量和循环内部作用域是父子关系。
+		for(let i = 0; i < 3; i++){
+			let i = 'abc';
+			console.log(i); //会打印三个abc
+		}
+		//例2 
+		/*function f(){ console.log('I am outside!') }
+		(function(){
+			if(false){
+				function f(){ console.log('I am inside!') }
+			}
+			f();
+		})();*/
+		// 例3
+		!function(){
+			// const a;  必须赋值
+			const a = 1;
+			// a =2 ; 改变会报错
+			const obj = {name: 'zgh'};
+			// obj = {}; 改变地址将会报错。
+		}();
+	</script>
+</body>
+</html>

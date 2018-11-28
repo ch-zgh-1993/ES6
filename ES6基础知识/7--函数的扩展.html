@@ -1,0 +1,103 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-07-17 10:30:13
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-10-19 16:24:34
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>function</title>
+</head>
+<body>
+
+
+	<script type="text/javascript">
+		//////
+		//  函数的扩展
+		//  
+		//  	1. 设置参数默认值
+		//  		推测判断是否为undefined吧, 果然。
+		//  		因为声明变量：
+		//  			如果是，则声明变量。所以不能重新声明，应该是let声明。不能有同名参数，否则声明两次。之前用var是可以的。
+		//  			每次调用，重新计算默认值。不缓存，类似于vue 的 methods;
+		//  			可以与解构赋值一起使用。
+		//  		默认值的参数应该是函数末尾的参数，否则无法省略。只能通过undefined省略。
+		//  		Function.length 将返回没有指定默认值参数的个数。length失真。length的定义，预期传入的参数个数。length记录到首个设置默认参数值结束。
+		//  		作用域按照声明顺序按规则赋值。
+		//  		
+		//  		指定某一个参数不能省略。其实判断undefined也可以。
+		//  	
+		//  	2. rest参数
+		//  
+		//////
+		
+		!function(){
+			function add(a = 0, b = 0){
+				console.info(a, b);
+
+				var a = [];
+				try{
+					a = {};
+					console.info('let 声明');
+				}catch {
+					console.info('const 声明');
+				}
+			}
+
+			add(1, undefined);
+
+			// 解构结合
+			function fun({a, b = 5}){
+				// 相当于 let {a, b = 5} = 参数;
+				console.info(a, b);
+			}
+			try{
+				fun();
+			}catch {
+				console.info('转解构问题，不能为null或undefined.');
+				console.info('推荐解构时，赋默认值空对象。');
+				console.info('解构尽量赋空对象，不要在空对象里设置默认值');
+			}
+			fun({});
+
+			// 默认值位置
+			function location(a = 1, b){
+				console.info(a, b);
+				console.info(location.length);
+				console.info(arguments.length);
+			}
+			// location(, 1); // 不能识别的,
+			location(1, 2);
+
+			// 暂时性死区报错
+			// var x = 1;
+			// function index(x = x){
+			// }
+			// index();
+
+			//  函数作用域引用变量，在内部变量声明前引用的是外部变量，声明后引用的是内部变量。
+			let head = 'header';
+			function change(func = () => head){
+				let head = 'footer';
+				console.info(func());
+			}
+			change();
+
+
+			// 指定某个参数不可省略。
+			// 如果你有值，我就让must等于你，否则就报错
+			function throwMissingParam(){
+				throw new Error('Missing parameter');
+			}
+			function miss(must = throwMissingParam()){
+			}	
+			// miss();
+		}();
+		
+	</script>
+</body>
+</html>

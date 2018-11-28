@@ -1,0 +1,202 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2017-11-30 19:37:49
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-10-13 10:23:48
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>字符串的扩展</title>
+	<link rel="stylesheet" type="text/css" href="base.css">
+</head>
+<body>
+	<div id="base">
+		<p><span>字符串Unicode表示法：</span>js允许采用 \uxxxx 表示一个字符，xxxx时字符的unicode码点。限于\u0000 ~ \uFFFF,超出必须使用两个双字节的形式表示。<em>例一</em></p>
+
+		<p><span>codePointAt</span>在js内部，一个字符为两个字节。对那些需要四个字节存储的字符js会认为他们是两个字符。此时用charAt()将无法读取，chartCodeAt()只能返回前两个字节和后两个字节的值。<span>codePointAt可以正确对32位UTF-16字符，返回一个字符的码点</span>默认返回十进制，若想要16进制，可通过toString转换一下。<span>codePointAt是检测一个字符是由两个字节还是四个字节组成的最简单方法。</span><em>例二</em></p>
+
+		<p><span>fromCodePoint()</span>从码点返回对应的字符。</p>
+
+		<p><span>字符串的遍历接口for of</span>此遍历接口最大的优点是可以识别大于0xFFFF的码点。对于像𠮷可以正确识别出来。</p>
+
+		<p><span>at()</span>对应于chartAt方法，返回字符串指定位置的字符，但不能识别大于0xFFFF码点的字符。而at可以，目前只是提案。可通过<span>库实现</span></p>
+
+		<p><span>normalize方法</span>将字符的不同表示方法统一为同样的形式，称为unicode正规化。四个参数(NFC, NFD, NFKC, NFKD)</p>
+
+		<p><span>includes(), startsWidth(), endsWidth()</span> includes:表示是否找到字符串。 startsWidth:表示是否在字符串头部。endsWidth: 表示字符串是否在原始字符串尾部。 </p>
+
+		<p><span>repeat</span>将原字符串重复多少次。返回新的字符串。参数是小数，则会被向下取整。负数或者Infinity.将报错。0-1，nan将取0.若为字符串，将转为数字后在进行操作。</p>
+		
+		<p><span>padStart, padEnd</span>字符串补全长度的功能，如果某个字符串不够指定长度，会在头部或尾部补全。<span>padStart头部补全</span>，<span>padEnd尾部补全</span>,不改变原字符串内容，两个参数(字符串的最小长度，补全的字符串) , 等于或大于时直接返回字符串，如果省略第二参数，则用空格补全。<span>用途：为数值补全指定位数， 提示字符串格式</span><em>例三</em> </p>
+
+		<p><span>matchAll()</span>返回一个正则表达式在当前字符串的所有匹配。</p>
+
+		<p><span>模板字符串</span>使用`反引号做标识，可以当做普通字符串，也可以定义多行字符串，或者在字符串中嵌入变量。如果使用`，需要\`. 如果使用模板字符串表示多行字符，所有的空格和缩进都会被保留在输出中。<em>例4</em>模板中的变量需要${}，大括号内可以放任意javascript表达式，可以进行运算，以及引用对象属性。还可以调用函数，若结果不是字符串，将按照转换规则转化为字符串。其中代码同js一样。模板字符串可以嵌套。如果需要引用模板字符串本身，<em>例4</em></p>
+
+		<p><span>模板编译</span><em>例5</em></p>
+
+		<p><span>标签模板</span>模板可以跟在函数名后，该函数将被调用来处理模板字符串。只是函数的一种特殊调用形式。但如果模板字符串有变量，就不再是简单的调用，而是把模板字符串预先处理为多个参数，再进行调用。处理格式([模板字符串没有进行变量替换的部分], 各个变量替换后的值)<em>例6</em></p>
+
+	</div>
+	
+	<div id="content"></div>
+
+	<script type="text/javascript">
+		function separationLine(){
+			console.log('%c----------------------------------------------------------------------------', 'color: red; font-size: 20px; font-weight: 800;');
+		}
+
+		//////
+		//	不太理解的内容：
+		//		模板字符串引用自身。。
+		//		模板编译
+		//  
+		//      //
+		//////
+
+
+		/*例一*/
+		function test1(){
+			separationLine();
+
+			var a = '\u0061';
+			console.log(a);
+		}
+		test1();
+		/*例二*/
+		function test2(){
+			separationLine();
+			var s = '𠮷';
+			console.log(s.length);
+			console.log(s.charAt(0));
+			console.log(s.charAt(1));
+			console.log(s.charCodeAt(0));
+			console.log(s.charCodeAt(1));
+
+			console.log(s.codePointAt(0));
+			console.log(s.codePointAt(1));
+			console.log(s.codePointAt(1).toString(16));
+
+			let string = '𠮷a';
+			for(let sr of string){ //for of 可以正确识别32位的UTF-16字符
+				console.log(sr.codePointAt(0).toString(16));
+			}
+			function is32Bit(c){
+				return c.codePointAt(0) > 0xFFFF;
+			}
+			console.log(is32Bit("𠮷"));
+			console.log(is32Bit("a"));
+		}
+		test2();
+		/*例三*/
+		!function test3(){
+			separationLine();
+			var str = 'x';
+			var padStart = str.padStart(4, 'ab');
+			console.info(str, padStart);
+
+			console.info(padStart.padStart(8));
+		}();
+		/*例四*/
+		!function test4(){
+			separationLine();
+			const content = document.getElementById('content');
+			const zs = 'zhangsan', ls = 'lisi', zw = 'zhouwu';
+			const ul = `
+			<ul>
+				<li>${zs}</li>
+				<li>${ls}</li>
+				<li>${zw}</li>
+			</ul>
+			`;
+			console.info(ul); 
+
+			console.info(`in javascript '\n' is a line-feed.`); //单行字符串
+			console.info(`in javascript 
+			is a line-feed.`); //多行字符串， 字符串这么写将会产生错误。
+			console.info(`jiu shi wo \`	\``);
+
+			// 模板字符串引用自身
+			// 方法1
+			let str = `return ` + '`Hello ${name}`';
+			let fun = new Function('name', str); //第一个参数为函数参数，第二个为函数体。
+			console.info(fun)
+			console.info(fun('zgh'));
+			// 方法2
+			let ss = '(name) => `Hello ${name}!`';
+			let ff = eval.call(null, ss);
+			console.info(ff);
+			console.info(ff('zgh'));
+		}();
+		/*例五*/
+		!function test5(){
+			separationLine();
+			let template = `
+			<ul>
+			    <% for(let i = 0; i < data.supplies.length; i++){ %>
+                  <li><%= data.supplies[i] %> </li> 
+			    <% } %>
+			</ul>
+			`;
+
+			// 编译思路
+			// 1.将其转为javascript字符串
+			// echo('<ul>');
+			// for(let i = 0; i < data.supplies.length; i++){
+			// 	echo('<li>');
+			// 	echo(data.supplies[i]);
+			// 	echo('</li>');
+			// }
+			// echo('</ul');
+			// 
+			// 使用正则表达式
+			function compile(template){
+				const evalExpr = /<%=(.+?)%>/g;
+				const expr = /<%([\s\S]+?)%>/g;
+				template = template.replace(evalExpr, '`); \n echo( $1 ); \n echo(`')
+					.replace(expr, '`); \n $1 \n  echo(`');
+
+				template = 'echo(`' + template + '`);';
+
+				let script = `(function parse(data){
+					let output = "";
+					function echo(html){
+						output += html;
+					}
+					${ template }
+					return output;
+				})`;
+				console.info(eval(script));
+
+				return script;
+			}
+			compile(template);
+		}();
+		/*例6*/
+		!function test6(){
+			let total = 30;
+			let msg = passthru`The total is ${total} (${total*1.05} with tax)`;
+			function passthru(literals){
+				let result = '',
+				i = 0; 
+				console.info(literals);
+				while(i < literals.length){
+					result += literals[i++];
+					if(i < arguments.length){
+						result += arguments[i];
+					}
+				}
+
+				return result;
+			}
+			console.info(msg);
+
+		}();
+		// 标签模板没看完
+	</script>
+</body>
+</html>

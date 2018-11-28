@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Class 的基本语法</title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+	//////
+	//  Class 的基本语法：
+	//  意义： 
+	//  	代替构造函数，定义类的概念。 语法糖，他的大部分功能，ES5都可以做到。
+	//  
+	//  优势：
+	//  	更加清晰、更像面向对象编程
+	//  
+	//  
+	//  内容：
+	//  	与ES5的构造函数的区别
+	//  	constructor 
+	//  	class 具体内容
+	//  	
+	//  	
+	//////
+	
+	// 区别差异
+	// class 更加清晰，更像面向对象编程
+	// 数据类型	都是函数, 类本身指向构造函数
+	// 使用 使用New命令
+	// 类的所有方法都定义在prototype属性上， 在类上调用方法，其实就是在调用原型上的方法。 类的新方法可以添加在 prototype 对象上。
+	// 类内部定义的方法：都是不可枚举的(non-enumerable)。
+	// 类的属性名可以采用表达式表达
+	// 
+	// 类和模块内部默认就是严格模式，不需要 use strict.
+	// 
+	!function(){
+		function Person(name, age, sex){
+			this.name = name;
+			this.age = age;
+			this.sex = sex;
+		}
+		Person.prototype.toString = function(){
+			return `( ${this.name}, ${this.age}, ${this.sex})`;
+		}
+		let p = new Person('zgh', 25, 'man');
+		console.info(Object.prototype.toString.call(Person));
+		console.info(typeof Person)
+		console.info(Person == Person.prototype.constructor);
+		console.info(p.toString());
+		console.info(Object.keys(Person.prototype));
+		console.info(Object.getOwnPropertyNames(Person.prototype));
+	}();
+	!function(){
+		let sayAge = 'sayAge';
+		class Person{
+			constructor(name, age, sex){
+				this.name = name;
+				this.age = age;
+				this.sex = sex;
+			}
+			toString(){
+				return `( ${this.name}, ${this.age}, ${this.sex})`;
+			}
+			[sayAge](){
+				return this.age;
+			}
+		}
+		let p = new Person('yyx', 25, 'woman');
+		console.info(typeof Person)
+		console.info(Object.prototype.toString.call(Person));
+		console.info(Person === Person.prototype.constructor);
+		console.info(p.toString());
+		// 添加方法：
+		Object.assign(Person.prototype, {
+			sayName(){
+				return this.name;
+			}
+		});
+		console.info(p.sayName());
+		console.info(p.sayAge());
+
+		console.info(Object.keys(Person.prototype));
+		console.info(Object.getOwnPropertyNames(Person.prototype));
+	}();
+
+
+	// constructor
+	// 通过new 生成实例时，默认调用constructor方法。一个类必须有constructor方法，如果没有，则空的会被默认添加。
+	// 默认返回实例对象，即this.也可以指定返回另外一个对象。
+	// 类必须使用new 调用。构造函数则可以不用。
+	// 
+	// 实例类的属性除非显示定义在其本身即this，否则都是定义在原型上。
+	// 实例共享一个原型对象
+	// 不建议在生产中使用 __proto__ , 避免对环境产生依赖。生产环境中，我们可以使用 Object.getPrototypeOf 方法来获取实例对象的原型，然后再来为原型添加方法/属性。
+	// 在定义类后，应该防止改变原型属性。
+	!function(){
+		let sayAge = 'sayAge';
+		class Person{
+			constructor(name, age, sex){
+				this.name = name;
+				this.age = age;
+				this.sex = sex;
+			}
+			toString(){
+				return `( ${this.name}, ${this.age}, ${this.sex})`;
+			}
+			[sayAge](){
+				return this.age;
+			}
+		}
+
+		let p = new Person();
+		function getValues(key){
+			console.info(p.hasOwnProperty(key));
+			console.info(p.__proto__.hasOwnProperty(key));
+		}
+
+		getValues('name');
+		getValues('toString');
+		getValues('constructor');
+		getValues('sayAge');
+
+		let p1 = new Person();
+		console.info(p1.prototype === p.prototype);
+		console.info(p1.__proto__ === p.__proto__);
+
+	}();
+
+	// Class 
+	// 表达式：
+	// 		类名是声明的变量，class 关键字后的名称只适用于在类的内部使用，指代当前类，相当于 let 声明变量吧。
+	// 		可以写出立即执行类，然而应该没有什么作用。
+	// 	类不存在变量提升。主要在于若类提升，那么let声明的类不提升，若let声明了父类，class 提升则子类继承父类时，父类不存在。
+	// 	
+	// 	私有方法和私有属性：
+	// 		私有方法：
+	// 			一种是使用 _ 标识，但在外部仍可调用。第二种：将私有方法移除模块。第三种是使用Symbol的唯一性，将私有方法命名为Symbol值。
+	// 		私有属性：
+	// 			提案：属性名增加 #, 也可用来写私有方法。私有属性可以设置 getter 和 setter
+	// 			
+	// 		
+	!function(){
+		let age = Symbol('age');
+		const Person = class index {
+			getClassName(){
+				return index.name;
+			}
+			[age] () {
+				return 'true';
+			}
+		};
+		console.info(Person);
+		let p = new Person();
+		
+		let student = new class {
+			constructor(name){
+				this.name = name;
+			}	
+			sayName(){
+				return this.name;
+			}
+			[age] () {
+				console.info('zz');
+			}
+		}('zgh');
+
+		class Coder {
+			[age] () {
+				return 'young';
+			}
+		}
+		console.info(student.sayName());
+		try{
+			console.info(student.age());
+		}catch (e){
+			console.info(e);
+		}
+
+
+	}();
+
+	// 	this指针：
+	// 		默认指向类的实例。但单独使用时将会产生一些问题。
+	// 		
+	// 	解决方法:
+	// 		1. 绑定this.
+	// 		
+	!function(){
+		class Logger {
+			// 1 绑定this
+			// constructor(){
+			// 	this.printName = this.printName.bind(this);
+			// }
+			
+			// 2. 使用箭头函数
+			// constructor(){
+			// 	this.printName = (name = 'there') => {
+			// 		this.print(`Hello ${name}`);
+			// 	}
+			// }
+
+			
+
+			printName(name = 'there') {
+		  		this.print(`Hello ${name}`);
+			}
+			
+			print(text) {
+		  		console.log(text);
+			}
+		}
+
+		// 3. 使用 Proxy， 获取方法的时候，自动绑定this。
+		function selfish (target) {
+		  	const cache = new WeakMap();
+		  	const handler = {
+		    	get (target, key) {
+		      		const value = Reflect.get(target, key);
+		      		if (typeof value !== 'function') {
+		        		return value;
+		      		}
+		      		if (!cache.has(value)) {
+		        		cache.set(value, value.bind(target));
+		      		}
+		      		return cache.get(value);
+		    	}
+		  	};
+		  	const proxy = new Proxy(target, handler);
+		  	return proxy;
+		}
+
+		const logger = selfish(new Logger());
+
+		// const logger = new Logger();
+		const { printName } = logger;
+		printName(); //此时 printName 的this 会指向当前环境，因为你把他抽出来了。废话。		
+
+	}();
+	// name 属性
+	// 		从构造函数继承： name 指向 class 关键字后的类名
+	// 		
+	// getter/setter 	
+	// 		可以使用get/set关键字，对某个属性设置存值和取值拦截函数。	
+	// 		存值和取值函数是设置在属性的 Descriptor 对象上的。
+	// 		
+	// 	Class 的 Generator 方法。 即在方法前加 *。
+	// 	
+	// 	Class 的静态方法： 
+	// 		类的所有方法都会被实例继承，如果再类的方法前加上 static，那么该方法不会被实例继承.而是通过类来调用，这就称为静态方法。
+	// 		静态方法与非静态方法可以重名。静态方法中的this指向类，而不是实例。
+	// 		父类的静态方法可以被子类继承。
+	// 		子类也可以调用父类的静态方法。
+	// 		
+	// 	Class 的静态属性和实例属性：
+	// 		静态属性指实例本身的属性。而不是定义在实例对象this上的属性。
+	// 		 ES6 明确规定，Class 内部只有静态方法，没有静态属性。
+	// 		 提案关于实例属性和静态属性的写法。
+	// 		 类的实例属性可以写入等式。静态属性只需要在实例属性前添加 static 即可。
+	// 		 新写法是显式声明（declarative），而不是赋值处理，语义更好。
+	// 	
+	// 	new.target属性：
+	// 		new 是从构造函数生成实例的命令。 new.target 返回new命令作用的那个构造函数。如果构造函数不是通过 new 调用，则 new.target 返回 undefined.
+	// 		使用位置： 构造函数和class内部使用。
+	// 		子类继承父类时，new.target 会返回子类。
+	// 		
+	// 		使用场景：													
+	// 			判断是否用new生成实例
+	// 			不能独立使用，必须继承后才能使用的类。
+	// 			
+	// 		
+	// 	
+	!function(){
+		class Person{
+
+			constructor(name, sex){
+				this.name = name;
+				this.sex = sex;
+				this.ageValue = 0;
+			}
+			toString(){
+				return `( ${this.name}, ${this.age}, ${this.sex})`;
+			}
+			get age (){
+				return this.ageValue;
+			}
+			set age (value){
+				this.ageValue = Number(value);
+			}
+		}
+		var p = new Person();
+		p.age = 15;
+		console.info(p.age);
+		
+		console.info(Object.getOwnPropertyDescriptor(Person.prototype, 'age'));
+		console.info('get' in Object.getOwnPropertyDescriptor(Person.prototype, 'age'));
+		console.info(Object.getOwnPropertyDescriptor(Person.prototype, 'age').hasOwnProperty('key')); // 可能是从原型链上继承的。
+
+		// class Test {
+		// 	name = 'zgh';
+		// 	static age = 18;
+		// }
+
+
+	}();
+
+</script>
+</body>
+</html>

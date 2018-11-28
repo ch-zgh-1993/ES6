@@ -1,0 +1,360 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-06-19 14:11:07
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-10-13 13:20:19
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Promise</title>
+
+</head>
+<body>	
+	<div id="errorImage"></div>
+	<div id="loadImage"></div>
+	
+	<script type="text/javascript">
+		//////
+		//  Promise: 解决异步的方案。之前是回调和事件。 优势是更加合理和强大。Promise是一个容器，在其中保存着某个未来才会结束的事件的结果。从他可获取异步操作的消息。
+		//  
+		//  特点：
+		//  	1. 对象的状态不受外界影响。	pending/fulfilled(成功)/rejected(失败)。只有异步操作的结果可以改变这个状态。
+		//  	2. 一旦状态改变，就不会再变，任何时候都可以得到这个结果。状态改变后将会凝固，resolved(已定型)。如果改变发生，再对promise添加回调函数，也会立即得到这个结果。这与event事件完全不同，event当你错过了，再监听将没有结果。
+		//  	
+		//  解决了：
+		//  	就可以将异步操作以同步操作的流程表达出来，避免了层层嵌套的回调函数。
+		//  	Promise对象提供统一的接口，使得控制异步操作更加容易。
+		//  	
+		//  缺点：
+		//  	1.无法取消。一旦创建，就会立即执行。
+		//  	2.如果不设置回调，内部错误不会抛出。
+		//  	3.当处于pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
+		//  	
+		//  异步方案选择：
+		//  	如果某些事件不断地反复发生，一般来说，使用 Stream 模式是比部署Promise更好的选择。
+		//  	
+		//  本章内容：
+		//  	1. 基本用法：
+		//  	2. Promise.prototype.then
+		//  	3. Promise.prototype.catch
+		//  	4. Promise.prototype.finally
+		//  	5. Promise.all
+		//  	6. Promise.race
+		//  	7. Promise.resolve
+		//  	8. Promise.reject
+		//  	9. 应用
+		//  	10. Promise.try
+		//  	
+		//  	
+		//  怀有疑问的点：
+		//  	1. promise中指定在下一轮循环事件中抛出的错误，将会冒泡到最外层，那么即使后面跟随了catch，也同样捕获不到呀。对于阮老师的思路不甚了解。个人感觉在这个之后的，catch后面的内容基本没用。
+		//  	2. finally 的实现和源码理解不同。。
+		//  	3. async 怎么吃掉错误呀。。。
+		//  
+		//////
+		///
+		
+		// 基本用法：
+		// 新建： new Promise()
+		// 
+		// parameter: 
+		// 		func(resolve, reject)
+		// 		resolve 成功调用，将结果传出
+		// 		reject 失败调用，将错误抛出
+		// 	
+		// 	使用：
+		// 		使用then方法指定成功/失败回调函数。
+		// 		then(func(value), func(reject)) 第一个状态成功调用，第二个状态失败调用可选。
+		// 		
+		// 	注意： 
+		// 		promise在新建后立即执行，then方法指定的回调函数，将在脚本所有同步任务执行完成后执行。
+		// 		在promise中的回调函数中，resolve和reject的参数，都将传递给then中的成功和失败执行函数。resolve的参数可以是另一个异步操作。状态会产生嵌套。当p2返回p1时，p2的状态将会无效，由p1决定。当p1失败时，将会触发catch事件。
+		// 		调用resolve/reject并不会终结Promise参数函数的执行。这是因为resolved是在最后执行的。
+		// 		一般来说，调用resolve/reject，promise的使命就完成了，后续操作应该放在then方法里面。所以最好在他们前面加上return语句，就不会产生意外。
+		// 
+		function timeout(ms){
+			return new Promise((resolve, reject) => {
+				setTimeout(resolve, ms, 'done');
+			});
+		}
+		
+		timeout(2000).then((value)=>{
+			console.info(value);
+		});
+
+		let promise = new Promise((resolve, reject) => {
+			console.info('Promise');
+			resolve();
+		});
+		promise.then((value) => {
+			console.info('resolved');
+			console.info(value);
+		});
+		console.info('Hi');
+
+		const p1 = new Promise(function(resolve, reject){
+			setTimeout(() => reject(new Error('fail')), 3000);
+		});
+		const p2 = new Promise((resolve, reject) => {
+			setTimeout(() => resolve(p1), 1000);
+		});
+
+		p2.then(result => console.info(result)).catch(error => console.info(error));
+
+		new Promise((resolve, reject) => {
+			resolve(1);
+			console.info(2);
+		}).then((value) => { console.info(value) });
+		new Promise((resolve, reject) => {
+			return resolve(1);
+			console.info(2);
+		}).then((value) => { console.info(value) });
+
+		//  Promise.prototype.then:
+		//  添加状态改变时的回调函数，resolved/rejected
+		//  then 方法返回的是一个新的promise实例，可使用链式调用。
+		
+
+		// Promise.prototype.catch 
+		// 是then函数的别名，用于指定发生错误时的回调函数。
+		// 如果对象变为resolved就会调用then指定的函数，如果异步操作出现错误，状态变为rejected，就会调用catch指定的方法。另外then若出现错误，也会被catch捕获
+		// catch和rejected可以实现同样的功能。
+		// 抛出错误和普通代码是不一样的，在抛出错误前执行resolve()将改变promise状态，那么抛出错误将会无效。
+		// 错误具有冒泡性质，即一直会向后传递，直到被捕获。
+		// 一般来说，总是用catch代替then 中的reject方法。更接近try/catch写法，可以捕获then中的错误。
+		// 如果没有指定catch方法，处理错误，Promise对象抛出的错误不会传递到外层代码。即不会有任何反应。即不会退出进程，终止脚本执行。即吃掉错误。
+		// 一般建议promise后总是跟随catch方法，这样可以处理promise内部的错误。catch返回的仍然是一个新的promise对象，因此可以链式调用。
+		//
+		// 
+		const p = new Promise((resolve, reject) => {
+			throw new Error('test');
+			// 等价于
+			// reject(new Error('test'))
+		});
+		p.catch((error) => {
+			console.info(error);
+		});
+
+		new Promise((resolve, reject) => {
+			resolve(2);
+			throw new Error('test2');
+			console.info('zz')
+		}).then((value) => { console.info('zgh') }).catch((error) => { console.info(error) });
+
+		new Promise((resolve, reject) => {
+			throw new Error('test3-error1');
+		}).then(null, (error) => { throw new Error('test3-error2')}).catch((error) => { console.info(error) });	
+
+		new Promise((resolve, reject) => {
+			throw new Error('test4');
+			// reject(x + 1);
+		});
+		console.info('2');
+		// 在Promise中指定下一轮事件循环中再抛出错误，到那个时候，Promise的运行已经结束了，那么这个错误将会冒泡到最外层。成为未捕获错误。
+		// 
+		new Promise((resolve, reject) => {
+			console.info('1');
+			resolve();
+			setTimeout(() => { throw new Error('test5'); }, 1000);
+		}).then(() => { console.info('111'); }).catch((error) => { console.info(error) });
+		console.info('error is doned');
+
+		// Promise.prototype.finally
+		// 相当于complete, 即无论状态如何，都会执行的回调。ES2018引入的标准。
+		// 不接受任何参数，那么意味着没有办法知道promise的状态。这表明，这里的操作应该与状态无关，不依赖promise的执行结果。
+		// 
+		// finally在then和catch执行后执行。
+		new Promise((resolve, reject) => {
+			console.group('finally');
+			resolve(2);
+		}).then(() => {
+			console.info('success');
+		}).finally(() => {
+			console.info('finally');
+			console.groupEnd();
+		});
+		// 看结果的[[PromiseValue]]值
+		// resolve、reject返回的是新构建的Promise的值。
+		// finally虽然也是新构建的promise，但是总是会返回原来的value值
+		console.info(Promise.resolve(2).then(() => {}, () => {}));
+		console.info(Promise.resolve(2).finally(() => {}))
+		console.info(Promise.reject(2).then(() => {}, () => {}));
+		console.info(Promise.reject(2).finally(() => {}))
+		// 获取[[PromiseValue]]的值
+		let getPV = Promise.resolve(2);
+		getPV.then((value) => { console.info(value)});
+		// 
+		// 实现方法
+		/*Promise.prototype.finally = (callback) => {
+			let p = this.constructor;
+			return this.then(
+				value => p.resolve(callback()).then(() => value),
+				reason => p.resolve(callback()).then(() => reason)
+			);
+		};*/
+
+		// Promise.all  用于将多个promsie实例，包装成一个新的Promise实例
+		// parameter: []
+		// 		数组中的每一项都应该是promise实例，如果不是，将调用promise.resolve方法，转为Promise实例，再做处理。参数可以不是数组，但必须具有Iterator接口，且返回的每个成员都是Promise实例。
+		// 	
+		// 	1.只有每个promise实例都变为fulfilled, 新的实例才会变为fulfilled。此时,每个promise返回的值将组成一个数组，传递给新实例的回调函数。
+		// 	2.只要数组中有一个被rejected，p的状态将变为rejected，此时，第一个被rejected的实例的返回值，将作为参数传递给新的promise实例。
+		// 	
+		// 	注意：如果数组中的promise实例自身定义了catch，那么当他被rejected，并不会触发总的catch。原理为promise实例自身的catch会生成一个新的promise实例，那么当他catch后，本身是resolved状态，只会触发总的resolve,即执行then中的函数。
+		const p4 = new Promise((resolve, reject) => {
+			resolve(1);
+		});
+		const p5 = new Promise((resolve, reject) => {
+			throw new Error('test');
+		}).catch(e => { console.info('p5 catch error'); });
+		const pall = Promise.all([p4, p5]).then(() => { console.info('all'); }).catch(e => { console.info(e); });
+
+		// 	Promise.race()
+		// 	将多个实例包装成一个新的实例。只要有一个状态改变，那么新的Promise实例状态就改变。他的值等于率先改变的promise值。
+		// 	
+		
+		// Promise.resolve()
+		// 有时需要将现有对象转为promise对象，Promise.resolve就起到这个作用。
+		// Promise.resolve(a)  ==  new Promise(resolve => resolve(a))
+		// parameter:
+		// 		1. 是promise实例，将不做任何修改，返回这个实例。
+		// 		2. 参数是一个具有then方法的对象，称之为thenable对象，将这个对象转为promise实例，然后立即执行thenablealbe对象的then方法。
+				const thenable = {
+					then(resolve, reject){
+						resolve(42);
+					}
+				};
+				const p6 = Promise.resolve(thenable)
+							.then((value) => { console.info(value); });
+		// 		3.参数不是具有then方法的对象，或根本不是对象。将返回一个新的Promise对象，状态为resolved.会立即执行回调函数。参数将直接传给resolve方法。
+		// 		4.不带有任何参数 直接返回一个resolved状态的Promise对象。
+		// 		
+		// 	注意：
+		// 		立即resolve的Promise对象，是在本轮事件循环的结束时，而不是在下一轮“事件循环”开始时。
+		// 		本轮事件： 执行所有同步代码，包括Promise构造函数中的代码 再执行立即resolve的then。
+				console.info('one');
+				Promise.resolve().then(() => { console.info('two'); });
+				setTimeout(() => {
+					console.info('three');
+				}, 0);
+				console.info('six');
+				new Promise((resolve, reject) => {
+					console.info("five")
+					setTimeout(() => {
+						resolve();
+					}, 0);
+				}).then(() => {
+					console.info('four');
+				});
+
+		
+		// Promise.reject
+		// 	返回一个新的Promise实例，状态为rejected.立即执行reject()
+		// 	而reject的参数，会原封不动的作为reject的参数。这一点与resolve是不一样的。
+			const thenReject = {
+				then(resolve, reject){
+					reject('出错了!');
+				}
+			};
+			Promise.reject(thenReject).catch(e => {
+				console.info(e);
+				console.info(e === thenReject);
+			});
+
+
+		// 应用
+		// 
+		// 加载图片
+		const preloadImage = (url) => {
+			return new Promise(function(resolve, reject){
+				const image = new Image();
+				image.onload = () => {
+					console.info('成功');
+					resolve(image);
+				};
+				image.onerror = () => {
+					console.info("失败");
+					reject();
+				};
+				image.src = url;
+			});
+		};
+		const loadDiv = document.getElementById('loadImage'),
+			errorDiv = document.getElementById('errorImage');
+		preloadImage('MVVM.png').then((image) => {
+			loadDiv.appendChild(image);
+		});
+		preloadImage('不存在的.jpg').then(() => { console.info('不存在的');}).catch((e) => {
+			console.info(e);
+			errorDiv.innerHTML = '加载失败';
+		});
+		// Generator 和 Promise的结合。
+		// 使用 Generator 管理流程，遇到异步操作时，返回一个promise对象.
+		// 
+		function getFoo() {
+			return new Promise((resolve, reject) => {
+				resolve('foo');
+			});
+		}
+		const g = function *(){
+			try{
+				const foo = yield getFoo();
+				console.info(foo);
+			}catch(e){
+				console.info(e);
+			}
+		};
+		function run(generator){
+			const it = generator();
+			function go(result){
+				if(result.done) return result.value;
+				return result.value.then((value) => {
+					return go(it.next(value));
+				}).catch((e) => {
+					return go(it.throw(e));
+				});
+			}
+			go(it.next());
+		}
+		run(g);
+
+		//  Promise.try
+		//  实际开发中会遇到，不管f是同步还是异步，就想用Promise处理。好处是都可以使用then指定下一步流程,catch捕获错误。		 
+		//  问题是，同步会放到本轮事件循环的末尾执行。
+		//  解决方法：
+		//  1.使用async函数来写。
+		//  注意：会吃掉错误？？ 没有吧，什么吃掉。
+		// 	
+		 const f = () => {
+		 	console.info('now');
+		 	throw new Error('吃掉了吗');
+		 };
+		 (async () => f())()
+		 .then(() => {
+		 	console.info('1111');
+		 })
+		 .catch((e) => {
+		 	console.info(e);
+		 });
+		 // 如果f是异步的，就可以使用then指定下一步
+		 console.info('next');
+		// 2. new Promise()
+		const f2 = () => console.info('now2');
+		(
+			() => new Promise( resolve=> resolve(f2()) )
+		)();
+		console.info('next2');
+		// 目前提案： Promise.try
+		// 事实上Promise.try就是模拟try代码块，就像catch模拟catch代码块。
+		// 
+		/*const f3 = () => console.info('now3');
+		Promise.try(f3);
+		console.info('next3');*/
+		
+	</script>
+</body>
+</html>

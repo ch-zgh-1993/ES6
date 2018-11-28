@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>变量的解构和赋值</title>
+	<style type="text/css">
+		*{ margin: 0; padding: 0; box-sizing: border-box; }
+		body{ padding: 20px; }
+		#base { background: #ccc; padding: 20px; }
+		#base p span { color: red; }
+		#base p em { font-size: 18px; color: chocolate; }
+	</style>
+</head>
+<body>
+	<div id="base">
+		<p><span>数组的解构和赋值</span>ES允许按照某种模式，从数组和对象中提取值，对变量进行赋值。这就是解构(Destructuring)。<em>例一</em>变量对应，若无对应，则为undefined，...为数组。如果右边不是数组，或者严格的说，不是可遍历的，会报错。<em>例二</em>允许默认值。<em>例三</em>ES6内部使用严格相等运算符，判断某个位置是否有值。如果不是，则默认值不会生效。</p>
+	
+		<p><span>对象的解构和赋值</span>变量必须与属性同名才能取值。若无该属性，则值为undefined,也可以指定默认值。同上，默认值生效的条件是，对象的属性严格等于undefined;将已声明的变量用于结构赋值,必须非常小心。等号左边可以不放置任何变量名，语法无误，但无意义。由于数组是特殊的对象，所以可以对数组进行对象属性结构。<em>例四</em></p>
+
+		<p><span>字符串的解构赋值</span>当字符串进行解构赋值时，字符串被转换为一个类似数组的对象。还可以使用类似数组对象的length属性解构赋值。<em>例五</em></p>
+		
+		<p><span>数值和布尔值的解构</span>解构赋值时, 若等号右边为数值或布尔值时，先转为对象。<em>例六</em></p>
+
+		<p><span>函数的参数的解构赋值</span>也可使用默认值<em>例七</em></p>
+
+		<p><span>圆括号问题</span>解构赋值对于编辑器解析来说并不容易，一个式子到底是模式还是表达式，只有在等号之前才能知道。问题：如果模式中出现圆括号，ES6规定，只要有可能导致解构的歧义，就不得使用圆括号。但识别和处理非常麻烦，故建议，不要在模式中使用圆括号。<em>例八</em></p>
+
+		<p><span>用途</span><em>例九</em></p>
+	</div>
+
+	<script type="text/javascript">	
+		/* 例一 */
+		function test1(){
+			console.log('-------------------------------------------------------------');
+			let [a, b, c] = [1, 2, 3];
+			console.log(a, b, c);
+
+			let [d, e] = [1, [2, 3]];
+			console.log(d, e);
+
+			let [f, g] = [ , 2];
+			console.log(f, g);
+
+			let [head, ...tail] = [1, 2, 3, 4];
+			console.log(head, tail);
+
+			let[x, y, ...z] = ['a'];
+			console.log(x, y, z);
+
+			let[h, [i], j] = [1, [2], 3];
+			console.log(h, i, j);
+
+			let [k] = new Set([['a', 'b']]);
+			console.log(k);
+		}
+		test1();
+
+		/* 例二 */
+		function test2(){
+			console.log('-------------------------------------------------------------');
+			// let [foo] = 1;
+			// let [foo1] = false;
+			// let [foo2] = NaN;
+			// let [foo3] = undefined;
+			// let [foo4] = null;
+			// let [foo5] = {};
+			// 上边除了最后一个都会先转为对象，再判断是否具有Iterator接口，如有，则可进行解构赋值。
+			// 事实上，只要某种数据结构具有Iterator接口，都可以采用数组形式的解构赋值。
+			function* fibs(){
+				let a = 0; 
+				let b = 1;
+				while(true){
+					yield a;
+					[a, b] = [b, a + b];
+				}
+			}
+			let [first, second, third, fourth, fifth] = fibs();
+			console.log(first, second, third, fourth, fifth);
+		}	
+		test2();
+
+		/* 例三 */
+		function test3(){
+			console.log('-------------------------------------------------------------');
+			let [foo = true] = [];
+			console.log(foo);
+
+			let [x, y='b'] = ['a', undefined];
+			console.log(x, y);
+
+			let [z = 'a'] = [null];
+			console.log(z);
+
+			/*如果默认值是一个表达式，则这个表达式是惰性求值的。即只有在用到的时候，才会求值*/
+			function f(){
+				console.log('不会运行的函数');
+				return 2;
+			}
+			let [a = f()] = [1];
+			console.log(a);
+			/*默认值可以引用解构赋值其他变量，但该变量必须已经声明*/
+			let [c =1, d =c] = [];
+			/*let [e = f, f = 1] = [];
+			console.log(c, d, e, f);*/
+		}	
+		test3();
+		/* 例四 */
+		function test4(){
+			console.log('-------------------------------------------------------------');
+			let {bar} = {'foo': 'aaa', bar: 'bbb' };//这个功能可以用来取对象中的属性的值
+			console.log(bar);
+
+			// 变量名不一致时
+			let {foo: baz } = { foo: "aaa"};
+			console.log(baz);
+
+			// 实际操作过程
+			let {a: a, b: b} = {a: 1, b: 2};//简写为 let { a, b }先找同名属性，再赋值给属性对应的变量。
+			console.log(a, b);
+
+			/*当然可以嵌套*/
+			let obj = { p: ['Hello', { y: 'world' }] };
+			let { p: [x, { y }] } = obj;
+			console.log(x, y);
+
+			let { p, p:[e, {y: f}] } = obj;
+			console.log(p, e, f);
+
+			const node = {
+				loc: {
+					start: {
+						line: 1,
+						cloumn: 5
+					}
+				}
+			};
+			let { loc, loc: { start, start: { line } } } = node;
+			console.log(loc, start, line);
+
+			let [object, arr] = [{}, []];
+			({foo: object.prop, bar: arr[0]} = {foo: 123, bar: true});
+			console.log(object, arr);
+
+			/*指定默认值*/
+			let { n: m = 3} = {};
+			let { m: n = 3 } = { m: 5 };
+			console.log(m, n);
+
+			/*将已声明变量用于结构赋值*/
+			let j;
+			// {j} = {j: 1}; //javascript引擎会将{j}理解为一个代码块，从而发生语法错误。syntax error,只有不将大括号写在首行，能避免这种错误。
+			({j} = {j: 1});
+			console.log(j);
+
+			/*对数组进行对象属性解构*/
+			let array = [1, 2, 3];
+			let { 0: first, [array.length - 1]: last } = array;//方括号属性属性名表达式
+			console.log(first, last);
+		}		
+		test4();
+		/* 例五 */
+		function test5(){
+			console.log('-------------------------------------------------------------');
+			let [a, b, c, d, e] = 'hello';
+			console.log(a, b, c, d, e);
+
+			let {length: f} = 'hello';
+			console.log(f);
+		}		
+		test5();
+		/* 例六 */
+		function test6(){
+			console.log('-------------------------------------------------------------');
+			let { toString: a } = 123;
+			console.log(a === Number.prototype.toString);//布尔值也一样
+
+			//解构时，只要右边不是数组和对象，就先转为对象，undefined和null无法转为对象，解构时会报错。
+			/*let {prop: b} = undefined;
+			console.log(b);*/
+		}		
+		test6();
+		/* 例七 */
+		function test7(){
+			console.log('-------------------------------------------------------------');
+			function add([x, y]){
+				return x + y;
+			}
+			console.log(add([1, 2]));
+
+			[[1, 2], [3, 4]].map(([a, b]) => console.log(a + b));
+
+			/*使用默认值*/
+			function move({x = 0, y=0} = {}){  //move的参数是一个对象，通过对这个对象进行解构，得到x,y
+				return [x, y];
+			}			
+			move({x: 3, y: 8});//[3, 8]
+			move({x: 3});// [3, 0]
+
+			function turn({x, y} = { x: 0, y: 0}){ //turn为函数的参数指定默认值,参数先作为{x,y}
+				return [x, y];
+			}
+			turn({x: 3, y: 8}); //[3, 8]
+			turn({x: 3}); //[3, undefined]
+			turn(); // [0, 0]
+
+			[1, undefined, 3].map((x = 'yes') => x); //[1, 'yes', 3] 当参数为undefined时，触发默认参数
+		}		
+		test7();
+		/* 例八 */
+		function test8(){
+			console.log('-------------------------------------------------------------');
+			/*以下三种解构赋值不得使用圆括号*/
+			/*1.变量声明语句,模式不能使用圆括号*/
+			/*let [(a)] = [1];
+			let { x: (c) } = {};
+			let ({x: c}) = {};
+			let {(x:c)} = {};
+			let {(x):c} = {};
+			let { o: ({ p: p})} = {o:{p:2}};*/
+
+			/*2.函数参数，同样属于变量声明*/
+			/*function f([(z)]) { return z;}*/
+			/*3.赋值语句的模式部分*/
+			// let [p, (q)] = [1, 2]; //不管是全部还是部分放在圆括号中，都会报错。
+
+			/*可以使用圆括号的情况，赋值语句的非模式部分*/
+			let b;
+			[(b)] = [3];
+			console.log(b);
+			({p: (d)} = {});
+			console.log(d);
+		}		
+		test8();
+		/* 例九 */
+		function test9(){
+			console.log('-------------------------------------------------------------');
+			/* 交换变量的值 */
+			let x = 1;
+			let y = 2;
+			[x, y] = [y, x];
+			console.log(x, y);
+
+			/*从函数返回多个值*/ 
+			function example(){ 
+				return { //数组也一样
+					a: 'a',
+					b: 'b'
+				}
+			}
+			let {a, b} = example();
+			console.log(a, b);
+
+			/*函数参数的定义*/
+			function f([x, y, z]){}
+			f([1, 2, 3]);
+			function fun({x, y, z}){}
+			fun({z: 'z', y: 'y', x: 'x'});
+
+			/*提取json数据*/
+			/*函数参数的默认值,避免在函数体内再写 var foo = config.foo || 'default foo';*/
+			function ajax(url, {
+				async = true,
+				beforeSend = function(){},
+				cache = true,
+				colmpeteL = function(){}
+			}){}
+
+			/*遍历map结构*/
+			// 任何部署了Iterator接口的对象，都可以用for of循环遍历。 Map结构原生支持Iterator接口，配合解构赋值，获取键名和键值就非常方便。
+			const map = new Map();
+			map.set('first', 'hello');
+			map.set('second', 'world');
+
+			for(let [key, value] of map){
+				console.log(key + ' is ' + value);
+			}
+			// 只获取键名
+			for(let[key] of map){}
+			//只获取键值
+			for(let[, value] of map){}
+
+			/*输入模块的指定方法,变得清晰*/
+			const {SourceMapConsumer, SourceNode} = require("source-map"); 
+		}
+		test9();
+	</script>
+</body>
+</html>
