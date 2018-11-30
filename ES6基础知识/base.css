@@ -1,0 +1,5 @@
+*{ margin: 0; padding: 0; box-sizing: border-box; }
+body{ padding: 20px; background: #ccc; }
+p { margin: 20px; }
+span { color: red; font-size: 17px; }
+em { font-size: 19px; color: chocolate; }
