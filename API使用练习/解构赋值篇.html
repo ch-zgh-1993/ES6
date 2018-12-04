@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>解构赋值</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	// 解构赋值：
+	// 		1. 对象
+	// 
+
+	// 对象：
+	// 		1. 使用计算的属性名称，创建动态属性名对象。
+	// 		2. 使用对象方法速记语法。
+	// 		3. 使用对象属性速记语法： 即将变量声明作为属性名，将变量的值作为属性值。
+	!function() {
+
+		let a = 'aValue';
+		let b = 'zz';
+		let obj = {
+			a,
+			[b]: 'zz'
+		};
+		console.log(obj);
+
+	}();
+
+</script>
+</body>
+</html>

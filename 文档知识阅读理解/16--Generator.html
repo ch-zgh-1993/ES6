@@ -1,0 +1,47 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-12-04 19:06:51
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-12-04 19:59:24
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>练习，尝试文档基础内容</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	// Generator:
+	// 
+
+	// 简单示例
+	function* g1(){
+		console.group('1');
+		console.log(0);
+		console.log(yield 1);
+		console.log(1);
+		console.log(1 + (yield) + 2);
+		console.log(2);
+		console.groupEnd();
+		return 3;
+		console.log(3);
+		yield 4;
+		console.groupEnd();
+	}
+	const generator1 = g1();
+	console.log('一');
+	console.log(generator1.next());
+	console.log('一');
+	console.log(generator1.next());
+	console.log('一');
+	console.log(generator1.next());
+	console.log('一');
+	console.log(generator1.next());
+	console.log('一');
+
+</script>
+</body>
+</html>
