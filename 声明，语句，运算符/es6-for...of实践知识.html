@@ -1,0 +1,102 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-12-05 09:12:31
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-12-05 11:15:52
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>for...of</title>
+</head>
+<body>
+
+	<p>1</p>
+	<p>2</p>
+	<p>3</p>
+
+<script type="text/javascript">
+	// for...of 
+	// 
+	// 1. Array
+	// 		返回键值。具有数字索引的值。
+	// 		
+	// 2. Set,Map
+	// 		1. Set: 返回键值。
+	// 		2. Map: 返回包含键名和键值的数组。 类似于 entires. 说是调用的该方法。
+	// 		
+	// 3. 伪数组：
+	// 		1. arguments: 类似于数组，返回值。
+	// 		2. DOMList: 值。
+	// 		3. 自造伪数组： 应该是没有 Symbol.iterator 属性。 可以使用 Array.from() 进行转换。
+	// 		
+	// 4. String: 
+	// 		返回每个位置的字符值。类似于伪数组。
+	// 		会正确识别 32 位 UTF-16 字符，返回字符。		
+	// 
+	// 		
+
+	function arr(){
+		console.group('arr');
+
+		let arr = [2, 3, 2];
+		arr.f = 4;
+
+		for(let v of arr){
+			console.info(v);
+			if(v === 3) break;
+		}
+		for(let v of arr){
+			console.info(v);
+		}
+
+		console.groupEnd();
+	}
+	arr();
+
+	function sm(){
+		console.group('set, map');
+
+		let set = new Set(['a', 1, 2]);
+		for(let key of set){
+			console.info(key);
+		}
+
+		let map = new Map().set('name', 'zgh').set('age', 18);
+		for(let key of map){
+			console.info(key);
+		}
+
+		console.groupEnd();
+	}	
+	sm();
+
+	function fakerArr(){
+		console.group('fakerArr');
+
+		(function(){
+			for (let argument of arguments) {
+			    console.log(argument);
+			}
+		})(1, 2, 3);
+
+		let ps = document.getElementsByTagName('p');
+		console.info(ps[Symbol.iterator]());
+		for(let p of ps){
+			console.info(p);
+		}
+
+		let myfaker = {0: 'a', 1: 's', length: 2 };
+		for(let key of Array.from(myfaker)){ 
+			console.info(key);
+		}
+
+		console.groupEnd();
+	}	
+	fakerArr();
+
+</script>
+</body>
+</html>
