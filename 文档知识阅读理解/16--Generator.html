@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-04 19:06:51
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-05 13:13:38
+* @Last Modified time: 2018-12-06 18:53:53
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -77,6 +77,29 @@
 		console.groupEnd();
 	}
 	FibonacciSequence();
+
+
+	// 获取 g 的 this, prototype, yield 表达式。
+	// 
+	function GData() {
+		console.group('GData');
+
+		function* g(){
+			this.g = 'generator';
+		}
+		g.prototype.age = 18;
+
+		const G1 = g();
+		console.info(G1 instanceof g);
+		// G1 => g => Generator => Symbol => Object => null
+		console.info(G1.__proto__.__proto__.__proto__.__proto__.__proto__);
+
+		const G2 = g.call(g.prototype);
+		console.info(G2.g);
+
+		console.groupEnd();
+	}
+	GData();
 </script>
 </body>
 </html>
