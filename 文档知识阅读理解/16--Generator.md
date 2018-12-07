@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-04 19:06:29
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-06 18:45:29
+* @Last Modified time: 2018-12-07 20:09:00
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
@@ -28,7 +28,7 @@
 
 ## Generator 本身
 1. this: ES6 规定 g 函数返回的遍历器对象是 函数的实例。继承了 prototype 上的方法。 g 不是构造函数。
-2. 
+2. 状态机： 实现状态的循环改变。 本身包含暂停状态。
 
 ## 属性(内部关键字， 遍历器方法)
 1. yield: 暂停执行。 等于为 JavaScript 提供了手动的“惰性求值”（Lazy Evaluation）的语法功能。
@@ -83,3 +83,14 @@ g[Symbol.iterator]() === g
 1. 只返回 Generator 函数中的 yield 的值， 一旦遇到 return ，将中止，且不返回 return 的值。
 2. 实现 **斐波切纳数列**。
 
+
+### 协程(coroutine)
+1. 含义： 是一种程序运行的方式，可以理解成“协作的线程”或“协作的函数”。
+2. 实现： 用单线程实现，也可以用多线程实现。
+3. 区别：
+    1. 子例程(subroutine)：采用堆栈执行方式，后进先出。只有当子函数完全执行完毕，才会结束执行父函数。
+    2. 可以并行执行、交换执行权的线程（或函数），就称为协程。
+    3. 从实现上看，在内存中，子例程只使用一个栈（stack），而协程是同时存在多个栈，但只有一个栈是在运行状态，也就是说，协程是以多占用内存为代价，实现多任务的并行。
+4. Generate:
+    1. Generator 函数是 ES6 对协程的实现，但属于不完全实现。Generator 函数被称为“半协程”（semi-coroutine），意思是只有 Generator 函数的调用者，才能将程序的执行权还给 Generator 函数。如果是完全执行的协程，任何函数都可以让暂停的协程继续执行。
+    2. 如果将 Generator 函数当作协程，完全可以将多个需要互相协作的任务写成 Generator 函数，它们之间使用yield表达式交换控制权。
