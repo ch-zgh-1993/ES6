@@ -1,0 +1,38 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-12-09 12:48:06
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-12-09 13:24:47
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>数据结构的 iterable 能力</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	// Iterator
+	//
+	
+	//基础内容：
+	function base() {
+		console.group('基础内容');
+
+		//  数据结构默认的 Iterator 接口
+		console.info('Symbol.iterator: ')
+		console.info(Symbol.iterator)
+
+		let arr = [1, 2];
+		// 返回数组的遍历器对象， 返回了 js 内置的类
+		console.info(arr[Symbol.iterator]().toString());
+
+		console.groupEnd();
+	}
+	base();
+
+</script>
+</body>
+</html>
