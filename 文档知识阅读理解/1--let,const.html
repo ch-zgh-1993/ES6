@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2017-10-30 11:00:50
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-11-30 19:03:03
+* @Last Modified time: 2018-12-12 16:24:35
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -53,6 +53,21 @@
 			const obj = {name: 'zgh'};
 			// obj = {}; 改变地址将会报错。
 		}();
+
+		// 错误形式
+		function error() {
+			console.group('错误形式');
+			// catch 不到的错误。
+			// try {
+			// 	const a;
+			// } catch(e) {
+			// 	console.log(e);
+			// }
+			
+		
+			console.groupEnd();
+		}	
+		error();
 	</script>
 </body>
 </html>
