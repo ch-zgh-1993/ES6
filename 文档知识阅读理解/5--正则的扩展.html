@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-12 17:10:24
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-12 17:10:33
+* @Last Modified time: 2018-12-13 20:44:14
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -13,5 +13,55 @@
 </head>
 <body>
 
+<script type="text/javascript">
+	// 正则表达式 RegExp
+	// 
+	// 
+	
+	// RegExp 对象
+	function base() {
+		console.group('对象解析');
+
+		const p = new RegExp(/^a/, 'i');
+
+		for(let key in p){
+			console.info(key + ': ' + p[key]);
+		}
+		console.info(p.__proto__);
+		for(let key in p.__proto__){
+			console.info(key + ': ' + p.__proto__[key]);
+		}
+
+		console.groupEnd();
+	} 
+	base();
+
+	// 新的内容尝试
+	// 
+	
+	function nContent() {
+		console.group('新的内容');
+
+	
+		console.groupEnd();
+	}
+	nContent();	
+	
+
+	// ES5 之前内容回顾
+	function oContent() {
+		console.group('回顾内容');
+
+		const p = /a\d/;
+		let str = 'a1a2a3';
+		console.info(str.match(p)); 
+		console.info(str.match(/a\d/g)); 
+		console.info(str.match(/a\d/y));
+		console.info(str.match(/a\d/yg));
+
+		console.groupEnd();
+	}
+	oContent();
+</script>
 </body>
 </html>
