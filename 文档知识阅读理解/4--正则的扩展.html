@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-12 17:10:24
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-13 20:44:14
+* @Last Modified time: 2018-12-14 15:31:19
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -42,6 +42,8 @@
 	function nContent() {
 		console.group('新的内容');
 
+		// 后行断言
+		let p = //;
 	
 		console.groupEnd();
 	}
@@ -52,12 +54,33 @@
 	function oContent() {
 		console.group('回顾内容');
 
+		// 测试 ES6 文档实例中，匹配分组 与 y 模式无关。
 		const p = /a\d/;
 		let str = 'a1a2a3';
 		console.info(str.match(p)); 
 		console.info(str.match(/a\d/g)); 
 		console.info(str.match(/a\d/y));
 		console.info(str.match(/a\d/yg));
+
+		// 正则中引用匹配内容。
+		//  \1, \2 引用匹配到的第几个内容。 必须与引用匹配到的内容完全一致。
+		//  \k<name>
+		let match = /(\d+)a\1/.exec('112a121');
+		let match2 = /(\d+)a/.exec('112a112');
+		console.info(match);
+		console.info(match2);
+		let match1 = /(?<name>\d+)a\k<name>/.exec('112a121');
+		console.info(match1);
+		
+		// 方法测试
+		// 
+		
+		// split 限制参数。
+		console.info('xaxaaxaaaxaaaa'.split(/a+/, 3));
+
+		// match
+		// 全局模式，返回所有的匹配字符串。
+		console.info('xaxaaxaaaxaaaa'.match(/(xa+)/g));
 
 		console.groupEnd();
 	}
