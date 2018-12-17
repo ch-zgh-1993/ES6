@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-07-17 10:30:13
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-10-19 16:24:34
+* @Last Modified time: 2018-12-17 19:35:02
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -35,37 +35,41 @@
 		//  
 		//////
 		
-		!function(){
-			function add(a = 0, b = 0){
-				console.info(a, b);
+		// 基础内容
+		function base(){
+			console.group('基础内容');
 
-				var a = [];
+			// 默认声明形式
+			function add(a = 0, b = 0){
+				// const a = [];
 				try{
 					a = {};
 					console.info('let 声明');
 				}catch {
 					console.info('const 声明');
 				}
+
+				console.info(a, b);
 			}
+			add([], undefined);
 
-			add(1, undefined);
-
-			// 解构结合
+			// 解构结合,推荐设置 {a, b=5} = {};
 			function fun({a, b = 5}){
 				// 相当于 let {a, b = 5} = 参数;
 				console.info(a, b);
 			}
 			try{
 				fun();
-			}catch {
-				console.info('转解构问题，不能为null或undefined.');
+			}catch(e) {
+				console.info(e);
+				console.info('转解构问题，不能为null或undefined. 右侧不可遍历');
 				console.info('推荐解构时，赋默认值空对象。');
 				console.info('解构尽量赋空对象，不要在空对象里设置默认值');
 			}
 			fun({});
 
 			// 默认值位置
-			function location(a = 1, b){
+			function location(a, b=1, c, d){
 				console.info(a, b);
 				console.info(location.length);
 				console.info(arguments.length);
@@ -78,6 +82,11 @@
 			// function index(x = x){
 			// }
 			// index();
+
+			console.groupEnd();
+		}
+		base();
+		!function(){
 
 			//  函数作用域引用变量，在内部变量声明前引用的是外部变量，声明后引用的是内部变量。
 			let head = 'header';
