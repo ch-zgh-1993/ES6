@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-07-17 10:30:13
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-19 10:53:07
+* @Last Modified time: 2018-12-20 16:00:33
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -119,10 +119,29 @@
 
 
 			console.groupEnd();
-
-
 		}
 		base();
+
+		// 尾调用优化
+		// 
+		function tailCall() {
+			console.group('尾调用');
+
+			function Fibonacci (n) {
+			  	if ( n <= 1 ) {return 1};
+			  	return Fibonacci(n - 1) + Fibonacci(n - 2);
+			}
+			// console.info(Fibonacci(100));
+
+			function Fibonacci2 (n , ac1 = 1 , ac2 = 1) {
+			  	if( n <= 1 ) {return ac2};
+			  	return Fibonacci2 (n - 1, ac2, ac1 + ac2);
+			}
+			console.info(Fibonacci(100));
+
+			console.groupEnd();
+		}
+		tailCall();
 	
 	</script>
 </body>
