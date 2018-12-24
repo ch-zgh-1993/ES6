@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-07-17 10:30:13
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-20 16:00:33
+* @Last Modified time: 2018-12-24 13:04:10
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -123,6 +123,7 @@
 		base();
 
 		// 尾调用优化
+		// 		使用好像没有明显作用。。
 		// 
 		function tailCall() {
 			console.group('尾调用');
@@ -137,11 +138,36 @@
 			  	if( n <= 1 ) {return ac2};
 			  	return Fibonacci2 (n - 1, ac2, ac1 + ac2);
 			}
-			console.info(Fibonacci(100));
+			// console.info(Fibonacci(100));
 
 			console.groupEnd();
 		}
 		tailCall();
+
+		// :: 绑定运算符
+		function bindOperate() {
+			console.group('绑定运算符');
+
+			var obj = {
+				name: 'zgh',
+				age: 18,
+				say() {
+					return 'i am a good boy';
+				}
+			}
+
+			function sayMine() {
+				console.info('name: ' + this.name);
+				console.info('age: ' + this.age);
+				console.info('want to say: ' + this.say);
+			}
+
+			sayMine();
+			obj::sayMine();
+
+			console.groupEnd();
+		}
+		bindOperate();
 	
 	</script>
 </body>
