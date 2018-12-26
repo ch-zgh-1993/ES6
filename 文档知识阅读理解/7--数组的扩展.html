@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-24 13:14:29
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-24 13:14:43
+* @Last Modified time: 2018-12-26 17:44:04
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -14,7 +14,18 @@
 <body>
 
 <script type="text/javascript">
+	// Array 的扩展
+	// 
 	
+	function base() {
+		console.group('基础内容');
+
+		var list = [1, 2];
+		console.info(...(0 ? [] : list));
+
+		console.groupEnd();
+	}
+	base();
 </script>
 </body>
 </html>
