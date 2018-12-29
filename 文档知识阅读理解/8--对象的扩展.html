@@ -1,0 +1,53 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-12-29 10:31:12
+* @Last Modified by:   zgh
+* @Last Modified time: 2018-12-29 11:03:17
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Object 的扩展</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	/////
+	// Object 的扩展
+	// 
+	/////
+	
+
+	//  基础内容
+	//  	1. 多个 getter 时，name 是不是取最后一个。
+	//  		1. 其实获取方法并不是 obj.get.name, 而是需要获取属性的描述，getOwnPropertyDescriptor(), 从描述获取 get 的名字，是唯一的。 'get name';
+	function base () {
+		console.group('基础知识');
+
+		function one () {
+			let obj = {
+				get name () {
+					return 'zgh';
+				},
+				get age () {
+					return 19;
+				}
+			};
+			try {
+				console.info(obj.get.name);
+			}catch (e) {
+				console.info(e);
+			}
+		}
+		one();
+
+		console.groupEnd();
+	}
+	base();
+
+
+</script>
+</body>
+</html>
