@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-29 10:31:12
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-29 11:03:17
+* @Last Modified time: 2019-01-02 19:09:30
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -23,6 +23,7 @@
 	//  基础内容
 	//  	1. 多个 getter 时，name 是不是取最后一个。
 	//  		1. 其实获取方法并不是 obj.get.name, 而是需要获取属性的描述，getOwnPropertyDescriptor(), 从描述获取 get 的名字，是唯一的。 'get name';
+	//  		2. 扩展运算符后有 get 方法会执行。 set 不会
 	function base () {
 		console.group('基础知识');
 
@@ -42,6 +43,22 @@
 			}
 		}
 		one();
+
+		function two () {
+			let obj = {
+				get value() {
+					console.info('get');		
+				},
+				set value(v) {
+					console.info('set');
+				},
+			};
+			let obj2 = {
+				...obj,
+			};
+		}
+		two();
+
 
 		console.groupEnd();
 	}
