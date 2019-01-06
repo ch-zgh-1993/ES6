@@ -1,0 +1,37 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-01-06 15:19:59
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-01-06 15:51:14
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Symbol</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	// Symbol 
+	// 
+	
+	// 基础内容
+	function base () {
+		console.group('基础内容');
+
+		const s = Symbol('name');
+		const s1 = Symbol.for('name');
+		s2 = Symbol.for('name');
+		console.info(s === s1);
+		console.info(s1 === s2);
+
+		console.groupEnd();
+	}
+	base();
+	console.info(Symbol.keyFor(s2));
+
+</script>
+</body>
+</html>
