@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-06 15:19:59
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-06 15:51:14
+* @Last Modified time: 2019-01-07 20:01:07
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -21,11 +21,44 @@
 	function base () {
 		console.group('基础内容');
 
+		console.group('name 查询问题');
+		// 只有 for 定义的，才可以查询，并且为全局保存。
 		const s = Symbol('name');
 		const s1 = Symbol.for('name');
 		s2 = Symbol.for('name');
 		console.info(s === s1);
 		console.info(s1 === s2);
+		console.groupEnd();
+
+		console.group('内部 Symbol 值');
+		// Symbol.hasInstance 
+		// 
+		// 可以返回任何类型的值， 但会转换为 Boolean 类型。
+		var obj = {
+			[Symbol.hasInstance](foo) {
+				console.info(foo);
+				return NaN;
+			}
+		};
+		console.info([1, 2, 3] instanceof obj);
+
+		// Symbol.isConcatSpreadable
+		// 		可以使用 concat 方法的值：
+		// 			1. undefined, 真值,
+		// 			2. 假值， NaN
+		const baseArr = [0];
+		const arr = [1, 2];
+		arr[Symbol.isConcatSpreadable] = NaN;
+		console.info(baseArr.concat(arr));
+
+		// Symbol.match
+		// 返回什么，调用响应的方法，就返回什么。
+		arr[Symbol.match] = function (str) {
+			return 'you are match';
+		};
+		console.info(''.match(arr));
+
+		console.groupEnd();
 
 		console.groupEnd();
 	}

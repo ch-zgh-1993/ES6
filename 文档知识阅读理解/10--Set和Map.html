@@ -1,0 +1,38 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-01-07 20:02:18
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-01-07 20:27:17
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Set,Map</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	// Set, Map数据结构
+	// 
+	
+	function base () {
+		console.group('基础知识');
+
+		console.group('对象采取 === 呗');
+		const set = new Set();
+		const obj = {};
+		set.add(obj);
+		set.add(obj);
+		console.info(set);
+
+		console.groupEnd();
+
+		console.groupEnd();
+	}
+	base();
+	
+</script>
+</body>
+</html>

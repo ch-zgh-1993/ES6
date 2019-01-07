@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-09 12:47:55
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-09 13:31:07
+* @Last Modified time: 2019-01-07 20:16:44
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
@@ -51,7 +51,7 @@
     1. Array，Set
 2. ...： 扩展运算符
 3. yield*
-4. 数组的遍历会调用遍历器接口，接收数组作为参数的，都调用了？
+4. 数组的遍历会调用遍历器接口，接收数组作为参数的，都调用了？ forEach 内部应该是用了，但是 map ， find 等没有使用，nodelist 无法直接使用这些方法，但可以使用 forEach 方法。
 
 
 ### 属性
