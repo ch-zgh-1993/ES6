@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-07 20:02:18
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-07 20:27:17
+* @Last Modified time: 2019-01-08 17:19:38
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -15,8 +15,12 @@
 
 <script type="text/javascript">
 	// Set, Map数据结构
+	// 基础知识：
 	// 
 	
+	// 基础知识
+	// 		1. 值采取类似 Object.is 的判断方式。
+	// 		2. key 与 value 相同？ 完全一致，不是键值，而是遍历器对象。
 	function base () {
 		console.group('基础知识');
 
@@ -26,6 +30,23 @@
 		set.add(obj);
 		set.add(obj);
 		console.info(set);
+		console.groupEnd();
+
+		console.group('对象的键也是对象？');
+
+		const set1 = new Set();
+		set1.add({
+			name: 'zgh',
+		});
+		for(let key of set1.entries()){
+			console.info(key);
+		}
+		for(let key of set1.values()){
+			console.info(key);
+		}
+		for(let key of set1.keys()){
+			console.info(key);
+		}
 
 		console.groupEnd();
 
