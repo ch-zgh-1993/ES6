@@ -1,0 +1,58 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-01-10 11:10:27
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-01-10 14:59:11
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Reflect</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	// Reflect:
+	// 
+	
+	// 基础内容，理解
+	function base () {
+		console.group('基础内容');
+
+		// get 无 receiver , 使用 target 作为 this。
+		var obj = {
+			f: 1,
+			s: 2,
+			get add() {
+				return this.f + this.s;
+			}
+		};
+		console.log(Reflect.get(obj, 'add'));
+
+		console.groupEnd();
+	}
+	base();
+
+	// 作用
+	// 1. 实现观察者模式：	自动观察数据对象，一旦发生变化，执行一系列操作。
+	// 
+	function use () {
+		// 实现观察者模式
+		const queuedObservers = new Set();
+
+		const observer = fn => queuedObservers.add(fn);
+		const observable = obj => new Proxy(obj, set);
+
+		function set(target, key, value, receiver) {
+			const result = Reflect.set(target, key, value, receiver);
+			queuedObservers.forEach(objserver => observer());
+			return result;
+		}
+	}
+	use();
+
+</script>
+</body>
+</html>
