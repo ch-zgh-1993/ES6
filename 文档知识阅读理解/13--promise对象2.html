@@ -1,0 +1,123 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-01-13 14:22:59
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-01-13 17:40:54
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Promise</title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+	
+	// Promise 2 
+	// 
+	// 1. 先回答之前提出的问题。
+	// 
+	// 2. 二次学习基础内容理解。
+	// 
+	
+	// 回答初学时提出的问题
+	// 
+	// 1. promise中指定在下一轮循环事件中抛出的错误，将会冒泡到最外层，那么即使后面跟随了catch，也同样捕获不到呀。对于阮老师的思路不甚了解。个人感觉在这个之后的，catch后面的内容基本没用。
+	// 		1. 
+	// 2.  finally 的实现和源码理解不同。。
+	// 
+	// 3. async 怎么吃掉错误呀。。。
+	// 
+	// 
+	function answerBefore () {
+		console.group('初学时提出的问题');
+
+
+
+		console.groupEnd();	
+	}
+	answerBefore();
+
+
+	// 二次学习基础内容理解。
+	// 
+	// 1. return 返回不返回 Promise 实例，是使用者决定的吧。 
+	// 		1. 一定返回 Promise 实例，即使你不返回值，也可以链式调用。 只是你不捕获而已。捕获是可以获取值的。
+	// 		
+	// 2. 看一下 reject 和 catch 之间的联系。
+	//		1. reject 如果已经拦截，那么 catch 将无作用。
+	//		2. 如果 reject 无，此时 catch 将生效。 且 catch 监听的不仅仅是 实例的错误，也包括 then 中的错误。 
+	//		3. then 后连写也是一样的，这里体现了错误的逐层抛出，因为此时 catch 明显监听的 新的 Promise 的实例，但是新的实例中也包括了最初实例的错误。
+	//		
+	// 3. 看一下 finally 接收的值。
+	// 
+	
+	function base () {
+		console.group('基础内容');
+
+		console.group('1');
+		const p1 = new Promise((resolve, reject) => {
+			setTimeout(() => {
+				
+				console.info('resolved');
+				resolve(true);
+				throw new Error('cccc');
+			}, 1000);
+		});
+		console.info(p1 instanceof Promise);
+		const p1t1 = p1.then((p) => {
+			console.info(p);
+			return true;
+		}, (e) => {
+			console.info(e);
+		});
+		console.info(p1t1 instanceof Promise);
+		const p2 = p1t1.then((resolve) => {
+			console.info(resolve);
+		});
+		console.info(p1);
+		console.groupEnd();
+
+		console.group('2');
+
+		var p3 = new Promise((resolve, reject) => {
+			throw new Error(' catch 是否可以拦截到');
+			setTimeout(() => resolve('xx'), 1000);
+		}).then(resolve => {
+			console.log('success');
+		}/*, e => {
+			console.info('reject error');
+		}*/).catch(e => {
+			console.info(e);
+			console.info('catch error');
+		});
+		/*p3.catch(e => {
+			console.info(e);
+			console.info('catch error');
+		});*/
+		console.info();
+
+		console.groupEnd();
+
+		console.group('3');
+
+		var p4 = new Promise((resolve, reject) => {
+			resolve('resolve');
+			reject('reject');
+		}).resolve('resolve').finally(p => {
+			console.info(p);
+		});
+
+		console.groupEnd();
+
+
+		console.groupEnd();
+	}
+	base();
+
+</script>
+</body>
+</html>
