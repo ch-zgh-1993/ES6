@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-13 14:22:59
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-13 17:40:54
+* @Last Modified time: 2019-01-14 20:51:38
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -21,6 +21,8 @@
 	// 1. 先回答之前提出的问题。
 	// 
 	// 2. 二次学习基础内容理解。
+	// 
+	// 3. 其他： group 记录的为同步内容，异步内容将被忽略。
 	// 
 	
 	// 回答初学时提出的问题
@@ -52,11 +54,24 @@
 	//		2. 如果 reject 无，此时 catch 将生效。 且 catch 监听的不仅仅是 实例的错误，也包括 then 中的错误。 
 	//		3. then 后连写也是一样的，这里体现了错误的逐层抛出，因为此时 catch 明显监听的 新的 Promise 的实例，但是新的实例中也包括了最初实例的错误。
 	//		
-	// 3. 看一下 finally 接收的值。
+	// 3. 看一下 finally 接收的值。 目前没有发现返回值，并且是与 resolve 或 reject 相关。
+	// 
+	// 4. all 内容总结:
+	// 		1. resolve: 返回所有的 resolve 值组成的数组。
+	// 		2. reject: 返回第一个 reject 的值作为数组。  如果报错的实例，自身拥有 catch， 则总的 实例不会拦截到错误，并且会正常 resolve, reject 的子实例传递给 all 实例的参数为 undefined。
+	// 		
+	// 
 	// 
 	
 	function base () {
 		console.group('基础内容');
+		setTimeout(() => {
+			console.info('下一轮事件');
+		}, 0);
+
+		Promise.reject('ss').catch(e => {
+			console.info(e);
+		});
 
 		console.group('1');
 		const p1 = new Promise((resolve, reject) => {
@@ -107,13 +122,36 @@
 		var p4 = new Promise((resolve, reject) => {
 			resolve('resolve');
 			reject('reject');
-		}).resolve('resolve').finally(p => {
+		}).then(p => {
+			console.info(p);
+		});
+		console.info(p4.finally(p => {
+			console.info(p);
+		}));
+
+		console.groupEnd();
+
+
+		console.group('all');
+		const p5 = new Promise((resolve, reject) => {
+			resolve('5');
+		});
+		const p6 = new Promise((resolve, reject) => {
+			reject('6');
+		}).catch(e => {
+			console.info(e);
+		});
+		const p7 = 2;
+		const a1 = Promise.all([p5, p6, p7]).then(param => {
+			console.info(param);
+		}).catch(p => {
 			console.info(p);
 		});
 
 		console.groupEnd();
 
 
+		console.info('本轮事件结束');
 		console.groupEnd();
 	}
 	base();
