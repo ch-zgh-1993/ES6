@@ -1,0 +1,73 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2018-07-02 16:14:15
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-01-15 18:39:56
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>async</title>
+</head>
+<body>
+
+
+	<script type="text/javascript">
+		//////
+		// async:
+		// 
+		// 		1. 基本语法
+		// 		
+		// 		
+		//////
+
+		// 基本语法：
+		//  	1. 返回Promise对象，遇到异步操作时，如果是 Promise 对象，那么会等待 Promsie resove/reject ，才继续执行，但如果是其他异步内容，如延时操作，回调函数等，会按照正确的顺序继续执行，而不等待。
+		//  	2. 
+		
+		!function(){
+			function timeOut(str, s){
+				return setTimeout(function(){
+					console.info(str);
+				}, s);
+			}
+			async function a1(str){
+				console.info('1');
+				console.info(await 2);
+				const thenAble = {
+					then(resolve) {
+						setTimeout(() => resolve(2), 1000);
+					},
+				};
+				await thenAble;
+
+				// throw new Error('throw error');
+				// return 'ss';
+
+				const errorAble = {
+					then(resolve, reject) {
+						setTimeout(() => reject('promise reject'), 1000);
+					},
+				};
+				// await errorAble;				
+				const a = await timeOut('2', 1000);
+				console.info('3');
+				const b = await timeOut('4', 2000);
+				console.info('5');
+				const c = await timeOut('6', 1500);
+				console.info('6');
+				// return str;
+			}
+			a1('its over').then((result) => {
+				console.info(result);
+				console.info('result' + ' !');
+			}).catch(e => {
+				console.info(e);
+			});
+		}();
+
+	</script>
+</body>
+</html>
