@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-19 15:06:50
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-19 17:32:10
+* @Last Modified time: 2019-01-24 15:43:24
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -16,10 +16,10 @@
 <script type="text/javascript">
 	// Class 总括
 	// 
-	// 		1. 基本内容：  
-	// 		
+	// 		1. Class基本内容：   
+	// 		2. SubClass 基本内容:
 
-	// 基本内容
+	// Class 基本内容
 	function base () {
 		console.group('基本内容');
 
@@ -27,15 +27,53 @@
 		
 		class  Person {
 			constructor() {
-				
 			}
 		}
+		
+		console.groupEnd();
+
+		console.group('属性方法，静态，私有');
+
+		class Man {
+			constructor(name, age) {
+				this.age = age;
+				this.name = name;
+			}
+			static sayName() {
+				return this.age;
+			}
+			sayName() {
+				return this.age;
+			}
+		}
+		Man.age = '1';
+
+		var person = new Man('zgh', 19);
+		console.info(person.age, person.sayName());
+		console.info(Man.age, Man.sayName());
 
 		console.groupEnd();
 
 		console.groupEnd();
 	}
 	base();
+
+	// SubClass 的基本内容
+	// 
+	// 	1. super 对象
+	function subClass () {
+		console.group('SubClass 的基本内容');
+
+		// super
+		console.group('super');
+
+	
+
+		console.groupEnd();
+
+		console.groupEnd();
+	}
+	subClass();
 
 </script>
 </body>
