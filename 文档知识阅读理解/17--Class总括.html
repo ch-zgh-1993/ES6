@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-19 15:06:50
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-24 15:43:24
+* @Last Modified time: 2019-01-25 15:16:27
 * @Description: create by zgh
 * @GitHub: Savour Humor
 -->
@@ -18,6 +18,7 @@
 	// 
 	// 		1. Class基本内容：   
 	// 		2. SubClass 基本内容:
+	// 		3. 原生构造函数的继承
 
 	// Class 基本内容
 	function base () {
@@ -64,16 +65,96 @@
 	function subClass () {
 		console.group('SubClass 的基本内容');
 
+		class A {
+			constructor(name) {
+				this.a = name;
+			}
+			say() {
+				return this.a;
+			}
+			static say() {
+				return 'static ' + this.a;
+			}
+		}
+		A.a = 'sa';
+
+		class B extends A {
+			constructor(name) {
+				super(name);
+				this.b = 'b';
+			}
+
+			say() {
+				console.info(super.say());
+				return this.b;
+			}
+
+			static say() {
+				console.info(super.say());
+			}
+		}
+		const b = new B('aaa');
+
 		// super
 		console.group('super');
+		b.say();
+		B.say();
+		console.groupEnd();
 
-	
+		// 继承
+		console.group('继承');
+		console.info(b);
 
 		console.groupEnd();
 
 		console.groupEnd();
 	}
 	subClass();
+
+
+	// 原生构造函数的继承
+	// 		1. 之前无法继承.
+	// 		2. ES6的继承
+	// 
+
+	function native() {
+		console.group('原生继承');
+
+		console.group('之前的原生继承');
+		// 之前
+		function MyArray() {
+			// 构造函数继承
+			Array.apply(this, arguments);
+		}
+		// 可以继承原型上的方法，但实例属性和方法无法正常改变。
+		MyArray.prototype = new Array();
+		// MyArray.prototype = Object.create(Array.prototype);
+		// Object.assign(MyArray.prototype, Array.prototype);
+
+		const arr = new MyArray();
+		console.info(arr)
+		arr[0] = 'cc';
+		console.info(arr.length);
+
+		console.groupEnd();
+		
+		console.group('ES6的继承')
+
+		class MyArr extends Array {
+			constructor(...args) {
+				super(...args);
+			}
+		}
+		const brr = new MyArr();
+		brr[0] = 'cc';
+		console.log(brr.length);
+		console.groupEnd();
+
+
+		console.groupEnd();
+	}
+	native();
+
 
 </script>
 </body>

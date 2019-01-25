@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-15 19:24:12
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-24 15:35:15
+* @Last Modified time: 2019-01-25 15:20:56
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
@@ -73,16 +73,73 @@ const Person = class Me {
     1. ES5 的继承，是先构建子类的实例对象 this, 再将父类的方法添加到 this 上面。
     2. 如果子类没有定义 constructor ，那么这个方法会被默认添加。
     3. 因此，只有调用 super 后，才可以使用 this 方法。
-2. super 用法：
+2. super 用法： 作为关键字，不能直接使用，必须指定为函数还是对象。
     1. 作为函数使用，表示父类的构造函数。 super 调用父类的构造函数，返回的是子类的实例。 this 指向子类。 所以 super 相当于 Class.prototype.constructor.call(subClass); 作为函数时，只能用在子类的构造函数中。
-    2. 
+    2. 作为对象： 在普通方法中，指向父类的原型对象。在静态方法中，指向父类。 构造函数中的属性和方法无法取到。调用方法同样，其中的 this 指向子类实例。
+        1. 通过 super 对某个属性赋值，这时时赋值在子实例上。
+        2. 静态方法中，super 的 this 指向子类。
 
 2. 父类的静态方法与属性。
 3. Object.getPrototypeOf(subClass) 可以获取子类的父类。
+4. extends: 不仅可以继承类，也可以继承原生的构造函数。
+
+继承:
+1. 之前的继承都是继承原型链的方法和属性，要么就是讲实例的属性和方法作为原型链上的一环。没有做到像 class 一样，有两条继承链。
+```js
+// 实例的原型指向构造函数的原型对象
+B.prototype = b.__proto__
+
+// 子类原型对象的原型，指向父类的原型对象
+B.prototype.__proto__ === A.prototype
+
+// 子类的原型，指向父类。
+B.__proto__ === A
+
+// 类继承实际上是
+// 原型链的继承
+Object.setPrototypeOf(B.prototype, A.prototype);
+// 实例的继承，构造函数的继承
+Object.setPrototypeOf(B, A);
+```
+
+原生构造函数的继承：
+
+1. 之前，原生构造函数无法继承，因为子类无法获得原生构造函数的内部属性。原生构造函数会忽略 apply 传入的 this。 可以继承原型上的方法和属性，但是构造函数内部的属性和方法无法获取。
+2. 之前的继承是，先创建之类的实例对象 this, 在将父类的属性添加到之类上。由于父类的内部属性无法获取，导致无法继承原生的构造函数。
+3. 先新建父类的实例对象 this, 然后在用之类的构造函数修饰 this,使得父类的所有行为都可以继承。
+4. ES6 规定，对象的构造函数，会忽略其他形式调用传递的参数。
+
+Mixin 模式：
+将多个类的接口混入另一个类。
+```js
+function mix(...mixins) {
+  class Mix {}
+
+  for (let mixin of mixins) {
+    // 类继承实现的两个链继承
+    copyProperties(Mix.prototype, mixin); // 拷贝实例属性
+    copyProperties(Mix.prototype, Reflect.getPrototypeOf(mixin)); // 拷贝原型属性
+  }
+
+  return Mix;
+}
+function copyProperties(target, source) {
+  for (let key of Reflect.ownKeys(source)) {
+    if ( key !== "constructor"
+      && key !== "prototype"
+      && key !== "name"
+    ) {
+      let desc = Object.getOwnPropertyDescriptor(source, key);
+      Object.defineProperty(target, key, desc);
+    }
+  }
+}
+```
 
 ## 使用总括
 1. 私有属性，私有方法 (#), (置顶的)静态属性，置顶属性， 目前在浏览器中是不可用的。 
-2. 
+2. 静态方法通常用于应用程序的工具函数。
+3. 我们通常想要的是，使用原型实现方法的继承，使用实例属性实现属性的继承。
 
 ## 注意内容
 1. 类和模块内的代码，默认使用严格模式。
