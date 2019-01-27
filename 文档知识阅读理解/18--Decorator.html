@@ -1,0 +1,40 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-01-26 09:32:38
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-01-26 09:40:39
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Decorator</title>
+	<meta charset="utf-8">
+
+</head>
+<body>
+
+<script type="text/javascript">
+// Decorator
+// 		1. 基础内容
+
+// 基础内容
+// 	1. 使用修饰器: 目前浏览器没有实现，故先理解其内容吧。
+function base() {
+	@test
+	class A {
+
+	}
+
+	function test (target) {
+		target.a = 'a';
+	}
+
+	console.log(A.a);
+}
+base();
+
+</script>
+</body>
+</html>
