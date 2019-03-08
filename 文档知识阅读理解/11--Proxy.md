@@ -2,12 +2,14 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-09 18:00:57
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-10 11:06:25
+* @Last Modified time: 2019-03-08 11:05:37
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # Proxy
 代理，即在对象增加一层拦截，外界对该对象的访问，必须先通过这层拦截。类似于 getter 和 setter ，对操作进行过滤和改写。 根据目标对象生成一个实例，而不是在目标对象上左拦截。
+
+替换了之前的 Object.observe, 是对对象进行的监控。而 Object.defineProperty 是对属性做的监控。
 
 ## 创建
 1. new Proxy(obj, handler);
