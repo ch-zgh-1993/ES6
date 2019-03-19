@@ -1,0 +1,51 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-03-19 14:21:49
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-03-19 20:20:24
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Proxy 使用</title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+	
+	//////
+	// Proxy:
+	// 		1. target 代指构建 proxy 的原始对象。 p 代指 proxy 对象。
+	//  
+	//   
+	//    
+	//      //
+	//////
+
+	const obj = {
+		first: 'z',
+		last: 'gh',
+		full: 'zgh',
+	};
+
+	const proxy = new Proxy(obj, {
+		get(target, key, p) {
+			console.log(target === obj);
+			console.info(p === proxy);
+			// 如果返回 p[key] 就重复循环了。
+			return target[key];
+		},
+		set(target, key, value, p){
+			console.info('set 了属性');
+			target[key] = value;
+		},
+	});
+	console.info(proxy.first);
+	proxy.xx = 'xx';
+
+</script>
+</body>
+</html>
