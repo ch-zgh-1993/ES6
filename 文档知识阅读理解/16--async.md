@@ -2,13 +2,20 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-04 19:03:16
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-15 19:12:51
+* @Last Modified time: 2019-03-21 20:22:50
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # async 总括
 
 简化异步操作，作为 Generator 的语法糖。 也可以看做是多个 Promise 组成的一个 Promise 对象。
+
+## 概括
+- 简化异步操作，作为 Generator 的语法糖， 也可以看做是多个异步操作，最终返回一个 Promise 对象。
+- 更加语义化： async 比 *, await 比 yield；
+- 返回值容易操作。
+- async, await, 遇到 await 如果是 Promise/thenable ，等待结果，如果不是，直接返回。
+- resolve, reject, catch。
 
 ## 优劣
 相对于 Generator 函数的优点：

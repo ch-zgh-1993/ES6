@@ -2,18 +2,32 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-10 15:00:11
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-14 20:56:20
+* @Last Modified time: 2019-03-21 20:19:36
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # Promise
 异步编程的一种解决方案，比较传统的解决方案，回调函数，和事件更加合理和强大。
 
+
+## 内容提要
+
+- 异步编程的一种解决方案，对比 回调，事件，async。 Promise 语义化不如 async, Genterator 需要执行器。
+- new Promise((resolve, reject) )
+- then
+- catch
+- finally
+- all:
+- race: 第一个改变状态的值，为总是理的状态。
+- resolve: 转为 promise 对象， thenable 属性。
+- reject: 同 resolve ，虽然是同步，但是都是在本轮事件结束时再执行， 不是下一轮事件开始时。
+- try: 同步同步执行，异步异步执行。
+
 ## 对比
 对比之前的回调函数和事件：
 1. 语义更加合理。
 2. 函数执行到 resolve, 则立即改变状态，后面的代码再抛出错误，也不会被 catch。 因为状态一旦改变，就不会再改变。
-3. 与事件不同，这里再调用，仍然可以获得 resolve 的值。
+3. 与事件不同，错过了异步，这里再调用，你会立即得到结果。
 2. 如果某些事件不断发生，使用 Stream 模式比 Promise 更好。
 3. 抛出的错误，不会影响外层代码的执行。
 

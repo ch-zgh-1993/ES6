@@ -2,13 +2,17 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-06 15:20:52
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-07 19:58:16
+* @Last Modified time: 2019-03-21 17:31:38
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # Symbol
 
 引入原因，防止属性命名冲突。即你引入的对象，与你即将增加的方法，属性名一样造成的问题。
+
+## 属性方法总括
+- for: 寻找一个以该字符串作为参数的 Symbol 值。
+- keyFor: 返回一个已经登记过 symbol 值得 字符串key。 
 
 ## 基本内容
 

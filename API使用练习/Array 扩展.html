@@ -1,0 +1,67 @@
+<!--
+* @Author: Zhang Guohua
+* @Date:   2019-03-21 14:09:34
+* @Last Modified by:   zgh
+* @Last Modified time: 2019-03-21 14:40:52
+* @Description: create by zgh
+* @GitHub: Savour Humor
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Array 扩展 </title>
+
+
+</head>
+<body>
+
+
+
+<script type="text/javascript">
+	///////////
+	// Array
+	// 
+	//  	1. 新增构造函数方法：
+	//  		1. Array.from: (arrlike, callback, thisarg) 将类数组，可迭代对象，转换为数组。 可以用函数进行处理。
+	//  		2. copyWithin: (target, start, end) copy 一个数组中的某一部分，到另一个位置。
+	//  		3. flat: 递归到指定深度，拆开数组，并返回一个新的数组。
+	//  		
+	//   
+	//    
+	//     
+	//      
+	//        //
+	///////////
+
+
+	function test () {
+		const person = {
+			name: ['z', 'g', 'h'],
+			[Symbol.iterator] () {
+				const self = this;
+			    let index = 0;
+			    return {
+			      next() {
+			        if (index < 2) {
+			          return {
+			            value: self.name[index++],
+			            done: false
+			          };
+			        } else {
+			          return { value: undefined, done: true };
+			        }
+			      }
+			    };
+			},
+		};
+
+		console.info(Array.from(person, (val) => {
+			return val+1;
+		}));
+	}
+
+	test();
+
+</script>
+</body>
+</html>

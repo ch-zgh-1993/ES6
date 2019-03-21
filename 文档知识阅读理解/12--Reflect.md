@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-10 11:11:03
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-10 14:29:38
+* @Last Modified time: 2019-03-21 16:25:21
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
@@ -17,6 +17,21 @@ Reflect 与 Proxy 一样，为了操作对象而提供了新的API。
 3. 让 Object 的某些命令式的方法变为函数行为，比如name in obj和delete obj[name]，而Reflect.has(obj, name)和Reflect.deleteProperty(obj, name)让它们变成了函数行为。
 
 4. Reflect 对象上的方法和 Proxy 对象一一对应。可以在 Proxy 的操作方法中，调用 Reflect 完成默认行为。
+
+## 方法和属性总括
+
+- apply: 
+- constructor:
+- deleteProperty:
+- get:
+- set:
+- getOwnPropertyDescriptor:
+- getPrototypeOf:
+- has:
+- isExtensible:
+- ownKeys:
+- preventExtensions:
+- setPrototypeOf:
 
 ## 静态方法
 公共内容：

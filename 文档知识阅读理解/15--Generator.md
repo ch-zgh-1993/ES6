@@ -2,11 +2,17 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-04 19:06:29
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-07 20:09:00
+* @Last Modified time: 2019-03-21 20:12:12
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # Generator 
+
+## 总括
+
+- 也是一种异步编程的解决方案。提供了新的语法。函数会返回一个遍历器对象。
+- function* (), yield 定义状态。
+- next, 直到结束。
 
 ## what, why ?
 ### what

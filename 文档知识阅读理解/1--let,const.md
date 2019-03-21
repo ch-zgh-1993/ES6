@@ -2,7 +2,7 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-12 16:01:04
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-12 16:09:17
+* @Last Modified time: 2019-03-21 19:00:18
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
@@ -23,4 +23,12 @@
 
 ## 差异
 1. var, function 还用于声明全局变量。
-2. let, const ,class 作为块变量声明。
+2. let, const ,class，import 作为块变量声明。
+
+
+## 注意事项
+
+- 解决了变量泄漏到上级，以及变量多次更换意义的问题，防止内层替换外层变量。
+- 暂时性死区。
+- const 指声明变量指向的内存地址保存的数据不能发生改变。即在变量堆中的地址不能改变。需要赋初始值。对于简单值，值就保存在地址中，对于复合类型，内存地址保存的是指向数据的指针，所以数据结构可变，但不能指向另一个地址。
+- 都不允许重复声明。

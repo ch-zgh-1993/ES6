@@ -2,12 +2,17 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-15 19:24:12
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-25 15:20:56
+* @Last Modified time: 2019-03-21 20:31:13
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # Class总括
 之前实例对象是通过构造函数，ES6 为了接近传统语言的写法，引入了 Class，作为对象的模板。 class 是语法糖，让对象原型的写法更加清晰、更像面向对象编程的语法而已。 
+
+## 总括
+- 便于传统语言的人理解，本身是函数，只是指定为类。
+- 类里的方法为原型方法，属性除非显示定义在 this 上，否则都是原型属性，可以有静态方法(不被实例继承)，静态属性(Person.)，私有方法，私有属性。 static, #; super 构造函数，父类，父类的原型对象。
+- 通过 extends 进行继承，继承原型链上的属性和方法，实例上的，静态方法也会被继承。 
 
 ## 基本内容
 创建：

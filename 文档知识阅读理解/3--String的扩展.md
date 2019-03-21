@@ -2,12 +2,22 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-12 16:39:30
 * @Last Modified by:   zgh
-* @Last Modified time: 2018-12-12 17:08:03
+* @Last Modified time: 2019-03-21 20:42:49
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # 字符串的扩展
 
+## 总括
+- 字符串模板
+- Iterator 接口
+- repeat: (n) 重复当前字符串 n 次。
+- padStart
+- padEnd
+- includes
+- startsWith
+- endsWith
+- matchAll
 
 ## 不常用内容
 1. 将字符使用 Unicode 进行表示。

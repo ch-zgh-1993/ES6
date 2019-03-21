@@ -2,12 +2,18 @@
 * @Author: Zhang Guohua
 * @Date:   2019-01-21 13:23:17
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-31 16:10:09
+* @Last Modified time: 2019-03-21 20:34:39
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # module 总括
 这里主要记录一些概念的内容，具体实践放在了一个项目中，后续可以建立一个完整的ES实践或测试项目，来容纳这些内容。
+
+## 主要内容
+
+- 统一社区的方案，使用原生 JS提供。
+- 静态加载/编译加载，运行加载。
+- type=module, strict, export, import, name as newName, export default;
 
 ## 引子
 1. 但 web 项目较大时，我们面临的模块化内容，解决拆分拼装。像Ruby的require, Python的import,CSS的@import.

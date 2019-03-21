@@ -2,11 +2,18 @@
 * @Author: Zhang Guohua
 * @Date:   2018-12-09 12:47:55
 * @Last Modified by:   zgh
-* @Last Modified time: 2019-01-07 20:16:44
+* @Last Modified time: 2019-03-21 20:08:49
 * @Description: create by zgh
 * @GitHub: Savour Humor
 */
 # Iterator 遍历器
+
+## 总括
+- Iteratore 是遍历器接口，为 for...of 使用。
+- next, Symbol.iterator 属性。
+- Array, Map, Set, String, NodeList, arguments, TypedArray 
+- ..., yield*, 
+- return, next, throw;
 
 ## what,why
 ### what
